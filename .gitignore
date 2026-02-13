@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+*.egg
+
+# PyInstaller
+build/
+*.spec
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Electron
+out/
+release/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Logs
+*.log
+
+# Config (may contain local paths)
+mtr_duat_config.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Temp files
+nul
+*.tmp
+~$*
