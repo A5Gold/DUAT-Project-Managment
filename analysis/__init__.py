@@ -83,7 +83,7 @@ __all__ = [
     'get_team_distribution',
     'get_job_type_manpower',
     'get_role_frequency',
-    'get_possession_vs_track_access',
+    'get_work_access_analysis',
     'get_individual_stats',
     'get_summary_kpis',
     'export_manpower_excel',

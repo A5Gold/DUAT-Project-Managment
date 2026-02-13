@@ -4,9 +4,12 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
+import logging
 import sys
 from pathlib import Path
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from analysis.performance import (
@@ -19,8 +22,8 @@ from analysis.performance import (
 
 router = APIRouter()
 
-# Global analyzer instance
-perf_analyzer = PerformanceAnalyzer()
+# Import shared analyzer from services
+from backend.services import perf_analyzer
 
 
 class AnalyzeRequest(BaseModel):
@@ -41,7 +44,7 @@ class RecoveryRequest(BaseModel):
 @router.post("/set-data")
 async def set_data_from_dashboard():
     """Set performance analyzer data from dashboard."""
-    from .dashboard import analyzer as dashboard_analyzer
+    from backend.services import dashboard_analyzer
     
     if dashboard_analyzer.df is None:
         raise HTTPException(status_code=404, detail="No dashboard data available")

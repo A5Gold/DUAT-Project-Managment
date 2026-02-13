@@ -4,18 +4,21 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
+import logging
 import tempfile
 import shutil
 from pathlib import Path
 import sys
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from analysis.lag_analysis import LagAnalyzer, get_status
 
 router = APIRouter()
 
-# Global analyzer instance
-lag_analyzer = LagAnalyzer()
+# Import shared analyzer from services
+from backend.services import lag_analyzer
 
 
 class ProjectConfig(BaseModel):
@@ -40,7 +43,7 @@ async def load_project_master(file: UploadFile = File(...)):
     
     try:
         # Try to get summary from dashboard if available
-        from .dashboard import analyzer as dashboard_analyzer
+        from backend.services import dashboard_analyzer
         summary_df = dashboard_analyzer.summary
         
         success = lag_analyzer.load_project_master(tmp_path, summary_df)

@@ -5,9 +5,12 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
+import logging
 import tempfile
 from pathlib import Path
 import sys
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from analysis.scurve import (
@@ -19,8 +22,8 @@ from analysis.scurve import (
 
 router = APIRouter()
 
-# Global generator instance
-scurve_gen = SCurveGenerator()
+# Import shared generator from services
+from backend.services import scurve_gen
 
 
 class SCurveRequest(BaseModel):
@@ -35,7 +38,7 @@ class SCurveRequest(BaseModel):
 @router.post("/set-data")
 async def set_data_from_dashboard():
     """Set S-Curve generator data from dashboard."""
-    from .dashboard import analyzer as dashboard_analyzer
+    from backend.services import dashboard_analyzer
     
     if dashboard_analyzer.df is None:
         raise HTTPException(status_code=404, detail="No dashboard data available")

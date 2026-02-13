@@ -7,11 +7,14 @@ from typing import List, Dict, Any, Optional
 from pathlib import Path
 import re
 from docx import Document
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-# Store search state
-search_state = {"results": [], "keyword": "", "total_files": 0, "matched_files": 0}
+# Import shared state from services
+from backend.services import search_state
 
 
 class KeywordSearchRequest(BaseModel):
@@ -70,7 +73,8 @@ async def search_keyword(request: KeywordSearchRequest):
             if unique:
                 matched_file_count += 1
                 all_matches.append({"filename": filepath.name, "matches": unique})
-        except Exception:
+        except Exception as e:
+            logger.warning("Failed to process %s: %s", filepath.name, e)
             continue
 
     search_state.update({

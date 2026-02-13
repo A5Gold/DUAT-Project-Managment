@@ -5,9 +5,12 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
+import logging
 import tempfile
 from pathlib import Path
 import sys
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from utils.excel_export import (
@@ -26,7 +29,7 @@ class ExportRequest(BaseModel):
 @router.post("/dashboard")
 async def export_dashboard(request: ExportRequest):
     """Export dashboard data to Excel file."""
-    from .dashboard import analyzer as dashboard_analyzer
+    from backend.services import dashboard_analyzer
     
     if dashboard_analyzer.df is None or dashboard_analyzer.summary is None:
         raise HTTPException(status_code=400, detail="No dashboard data to export")
@@ -59,7 +62,7 @@ async def export_dashboard(request: ExportRequest):
 @router.post("/lag-analysis")
 async def export_lag_analysis(request: ExportRequest):
     """Export lag analysis results to Excel file."""
-    from .lag import lag_analyzer
+    from backend.services import lag_analyzer
     
     if lag_analyzer.results is None:
         raise HTTPException(status_code=400, detail="No lag analysis results to export")
@@ -97,7 +100,7 @@ async def download_file(file_type: str):
 @router.post("/save-dashboard")
 async def save_dashboard_to_folder(folder_path: str = ""):
     """Save dashboard Excel to the source folder (like the Flet app does)."""
-    from .dashboard import analyzer as dashboard_analyzer
+    from backend.services import dashboard_analyzer
     
     if dashboard_analyzer.df is None or dashboard_analyzer.summary is None:
         raise HTTPException(status_code=400, detail="No dashboard data to export")

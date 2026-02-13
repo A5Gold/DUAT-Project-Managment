@@ -4,12 +4,15 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
+import logging
 import tempfile
 import shutil
 from pathlib import Path
 import sys
 import numpy as np
 import pandas as pd
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from analysis.dashboard import (
@@ -44,8 +47,8 @@ def convert_to_native(obj):
 
 router = APIRouter()
 
-# Global analyzer instance
-analyzer = DashboardAnalyzer()
+# Import shared analyzer from services
+from backend.services import dashboard_analyzer as analyzer
 
 
 class RecordsInput(BaseModel):

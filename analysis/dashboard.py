@@ -89,25 +89,28 @@ def calculate_summary(df: pd.DataFrame, current_week: int = None, current_month:
     return summary
 
 
-def get_weekly_trend(df: pd.DataFrame, weeks: int = 12) -> Tuple[List[str], Dict[str, List[int]]]:
+def get_weekly_trend(df: pd.DataFrame, weeks: int = 12, job_keywords: List[str] = None) -> Tuple[List[str], Dict[str, List[int]]]:
     """
     Get weekly trend data for Projects vs Jobs.
-    
+
     Args:
         df: DataFrame with raw data
         weeks: Number of recent weeks to include
-        
+        job_keywords: List of job type keywords (default from config)
+
     Returns:
         Tuple of (week labels, category data dict)
     """
     if df is None or df.empty:
         return [], {}
-    
+
     try:
         df_copy = df.copy()
-        
-        # Job keywords
-        job_keywords = ['CBM', 'CM', 'PA work', 'HLM', 'Provide']
+
+        # Job keywords from config or default
+        if job_keywords is None:
+            from config import load_app_config
+            job_keywords = load_app_config().get("keywords", ['CBM', 'CM', 'PA work', 'HLM', 'Provide'])
         
         # Create YearWeek column
         if 'Year' in df_copy.columns and 'Week' in df_copy.columns:
@@ -174,15 +177,21 @@ def get_monthly_trend(df: pd.DataFrame, months: int = 6) -> Tuple[List[str], Lis
     try:
         df_copy = df.copy()
         
-        if 'Year' in df_copy.columns and 'Week' in df_copy.columns:
-            df_copy['Year'] = pd.to_numeric(df_copy['Year'], errors='coerce')
-            df_copy['Week'] = pd.to_numeric(df_copy['Week'], errors='coerce')
-            df_copy = df_copy.dropna(subset=['Year', 'Week'])
-            df_copy['Month'] = ((df_copy['Week'] - 1) // 4.33 + 1).astype(int).clip(1, 12)
-            df_copy['YearMonth'] = (
-                df_copy['Year'].astype(int).astype(str) + '-' + 
-                df_copy['Month'].astype(str).str.zfill(2)
-            )
+        if 'DateObj' in df_copy.columns or ('Year' in df_copy.columns and 'Week' in df_copy.columns):
+            # Prefer DateObj for accurate month calculation
+            if 'DateObj' not in df_copy.columns or df_copy['DateObj'].isna().all():
+                df_copy['Year'] = pd.to_numeric(df_copy['Year'], errors='coerce')
+                df_copy['Week'] = pd.to_numeric(df_copy['Week'], errors='coerce')
+                df_copy = df_copy.dropna(subset=['Year', 'Week'])
+                # Build DateObj from Year+Week using ISO calendar
+                df_copy['DateObj'] = pd.to_datetime(
+                    df_copy['Year'].astype(int).astype(str) + '-W' +
+                    df_copy['Week'].astype(int).astype(str).str.zfill(2) + '-1',
+                    format='%G-W%V-%u',
+                    errors='coerce'
+                )
+            df_copy = df_copy.dropna(subset=['DateObj'])
+            df_copy['YearMonth'] = df_copy['DateObj'].dt.strftime('%Y-%m')
             monthly = df_copy.groupby('YearMonth').size().reset_index(name='NTH')
             monthly = monthly.sort_values('YearMonth').tail(months)
             return monthly['YearMonth'].tolist(), monthly['NTH'].tolist()
@@ -193,7 +202,7 @@ def get_monthly_trend(df: pd.DataFrame, months: int = 6) -> Tuple[List[str], Lis
             monthly = df_copy.groupby('YearMonth').size().reset_index(name='NTH')
             monthly = monthly.sort_values('YearMonth').tail(months)
             return monthly['YearMonth'].tolist(), monthly['NTH'].tolist()
-            
+
     except Exception as e:
         logger.error(f"Error in monthly trend: {e}")
     
@@ -227,25 +236,29 @@ def get_project_distribution(df: pd.DataFrame) -> Dict[str, int]:
     return {}
 
 
-def get_keyword_distribution(df: pd.DataFrame) -> Dict[str, int]:
+def get_keyword_distribution(df: pd.DataFrame, job_keywords: List[str] = None) -> Dict[str, int]:
     """
     Get NTH distribution by keyword jobs.
-    
+
     Args:
         df: DataFrame with raw data
-        
+        job_keywords: List of job type keywords (default from config)
+
     Returns:
         Dictionary of keyword -> NTH count
     """
     if df is None or df.empty:
         return {}
-    
+
     try:
-        keywords = ['CBM', 'CM', 'PA work', 'HLM', 'Provide']
+        if job_keywords is None:
+            from config import load_app_config
+            job_keywords = load_app_config().get("keywords", ['CBM', 'CM', 'PA work', 'HLM', 'Provide'])
+
         keyword_totals = {}
         
         if 'Project' in df.columns:
-            for kw in keywords:
+            for kw in job_keywords:
                 mask = df['Project'].astype(str).str.upper().str.contains(
                     kw.upper(), na=False
                 )
@@ -406,6 +419,7 @@ class DashboardAnalyzer:
             return False
         
         raw_df = self.df[["Year", "Day", "Date", "Week", "Project", "Qty Delivered"]].copy()
+        nth = self.nth_trend if self.nth_trend is not None else pd.DataFrame()
         return export_dashboard_excel(
-            raw_df, self.summary, self.nth_trend or pd.DataFrame(), output_path
+            raw_df, self.summary, nth, output_path
         )

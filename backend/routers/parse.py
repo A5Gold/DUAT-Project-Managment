@@ -8,21 +8,17 @@ import tempfile
 import shutil
 from pathlib import Path
 import sys
+import logging
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from parsers.docx_parser import DailyReportParser, process_docx
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
 
-# Store parsing state for progress tracking
-parsing_state = {
-    "in_progress": False,
-    "progress": 0,
-    "current_file": "",
-    "total_files": 0,
-    "records": [],
-    "max_week": 0
-}
+# Import shared state from services
+from backend.services import parsing_state
 
 
 class FolderParseRequest(BaseModel):
@@ -56,6 +52,7 @@ async def parse_single_docx(file: UploadFile = File(...)):
             "records": records
         }
     except Exception as e:
+        logger.error("Failed to parse DOCX: %s", e)
         raise HTTPException(status_code=500, detail=str(e))
     finally:
         tmp_path.unlink(missing_ok=True)
@@ -109,6 +106,7 @@ def process_folder_background(folder_path: Path):
         parsing_state["max_week"] = parser.get_max_week()
         parsing_state["progress"] = 1.0
     except Exception as e:
+        logger.error("Background folder parsing failed: %s", e)
         parsing_state["error"] = str(e)
     finally:
         parsing_state["in_progress"] = False

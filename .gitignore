@@ -12,7 +12,9 @@ dist/
 
 # PyInstaller
 build/
-*.spec
+backend_dist/
+*.manifest
+*.spec.tmp
 
 # Node
 node_modules/
@@ -47,3 +49,12 @@ mtr_duat_config.json
 nul
 *.tmp
 ~$*
+
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build artifacts
+*.spec.tmp
+=1.1

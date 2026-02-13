@@ -6,15 +6,18 @@ from pydantic import BaseModel
 from typing import List, Dict, Any
 from pathlib import Path
 import sys
+import logging
 
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from parsers.manpower_parser import ManpowerParser
 from analysis.manpower import ManpowerAnalyzer
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
 
-# Store manpower state
-manpower_state = {"records": [], "total_files": 0}
+# Import shared state from services
+from backend.services import manpower_state
 
 
 class ManpowerScanRequest(BaseModel):

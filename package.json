@@ -1,0 +1,29 @@
+{
+  "name": "mtr-duat",
+  "version": "4.0.0",
+  "description": "MTR PS-OHLR DUAT - Daily Update Analysis Tool",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "set DUAT_ENV=development&& electron .",
+    "dev:backend": "python backend/main.py --port 8000",
+    "dev:frontend": "cd frontend && npm run dev",
+    "electron:dev": "electron .",
+    "electron:build": "electron-builder --win --config electron-builder.yml",
+    "frontend:build": "cd frontend && npm run build",
+    "backend:build": "pyinstaller backend.spec --distpath backend_dist --clean --noconfirm",
+    "build:all": "npm run frontend:build && npm run backend:build && npm run electron:build",
+    "build": "npm run frontend:build && npm run electron:build",
+    "test:electron": "vitest --run --config electron/vitest.config.js",
+    "test:backend": "pytest tests/ --cov --cov-report=term-missing",
+    "test:frontend": "cd frontend && npm run test",
+    "test:all": "npm run test:backend && npm run test:frontend && npm run test:electron"
+  },
+  "author": "MTR",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "electron": "^33.4.0",
+    "electron-builder": "^25.1.8",
+    "vitest": "^4.0.18"
+  }
+}

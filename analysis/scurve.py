@@ -48,20 +48,33 @@ def calculate_scurve_data(
     if project_df.empty:
         return [], [], [], 0.0
     
-    # Calculate total weeks
-    total_weeks = (end_year - start_year) * 52 + (end_week - start_week)
+    # Calculate total weeks (handle years with 53 ISO weeks)
+    def _weeks_in_year(year: int) -> int:
+        """Return 52 or 53 depending on ISO week count for the year."""
+        from datetime import date
+        dec28 = date(year, 12, 28)
+        return dec28.isocalendar()[1]
+
+    total_weeks = 0
+    y, w = start_year, start_week
+    while (y, w) != (end_year, end_week):
+        total_weeks += 1
+        w += 1
+        if w > _weeks_in_year(y):
+            w = 1
+            y += 1
     if total_weeks <= 0:
         return [], [], [], 0.0
-    
+
     # Generate week labels
     week_labels = []
     current_year = start_year
     current_week = start_week
-    
+
     for _ in range(total_weeks + 1):
         week_labels.append(f"{current_year}-W{current_week:02d}")
         current_week += 1
-        if current_week > 52:
+        if current_week > _weeks_in_year(current_year):
             current_week = 1
             current_year += 1
     
@@ -242,9 +255,12 @@ def generate_scurve_excel(
             ws_chart = wb.create_sheet("S-Curve Chart")
             img = XLImage(str(chart_path))
             ws_chart.add_image(img, "A1")
-            chart_path.unlink()  # Delete temp file
-        
+
         wb.save(output_path)
+
+        # Clean up temp file after save
+        if chart_path.exists():
+            chart_path.unlink()
         return True, progress
         
     except Exception as e:

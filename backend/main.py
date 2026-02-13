@@ -4,6 +4,9 @@ FastAPI backend server for the MTR DUAT application.
 Provides REST API endpoints for all analysis operations.
 """
 
+import argparse
+import logging
+import os
 import sys
 from pathlib import Path
 
@@ -22,13 +25,14 @@ from routers import config, parse, dashboard, lag, performance, scurve, export, 
 app = FastAPI(
     title="MTR PS-OHLR DUAT API",
     description="REST API for MTR Progress Dashboard & NTH Analysis",
-    version="3.0.0"
+    version="4.0.0"
 )
 
 # CORS middleware for frontend access
+_cors_origins = os.environ.get("DUAT_CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=_cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -55,13 +59,27 @@ async def root():
 @app.get("/api/health")
 async def health_check():
     """API health check."""
-    return {"status": "healthy", "version": "3.0.0"}
+    return {"status": "healthy", "version": "4.0.0"}
 
 
 def start_server(host: str = "127.0.0.1", port: int = 8000):
     """Start the FastAPI server."""
-    uvicorn.run(app, host=host, port=port)
+    log_level = os.environ.get("DUAT_LOG_LEVEL", "info").lower()
+    logging.basicConfig(
+        level=getattr(logging, log_level.upper(), logging.INFO),
+        format="[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    uvicorn.run(app, host=host, port=port, log_level=log_level)
+
+
+def _parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="MTR DUAT FastAPI Backend")
+    parser.add_argument("--port", type=int, default=8000, help="Port to listen on (default: 8000)")
+    parser.add_argument("--host", type=str, default="127.0.0.1", help="Host to bind to (default: 127.0.0.1)")
+    return parser.parse_args()
 
 
 if __name__ == "__main__":
-    start_server()
+    args = _parse_args()
+    start_server(host=args.host, port=args.port)

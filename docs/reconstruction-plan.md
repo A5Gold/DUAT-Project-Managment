@@ -13,6 +13,7 @@
 ### 1.1 現況
 
 MTR PS-OHLR DUAT 目前由以下元件組成：
+
 - Python FastAPI 後端（9 個 API router，38 個端點）
 - 5 個分析模組（Dashboard, Lag, Performance, S-Curve, Manpower）
 - 4 個外部依賴模組（需重新開發：docx_parser, manpower_parser, config, excel_export）
@@ -52,14 +53,14 @@ graph TB
 
 ### 1.3 部署環境
 
-| 項目 | 說明 |
-|------|------|
-| 目標作業系統 | Windows 10/11 |
-| 網路環境 | 企業內部網路，可存取 SharePoint，有網際網路 |
-| 安裝限制 | 無法安裝任何程式，僅能執行可攜式 .exe |
-| 資料來源 | DOCX 檔案透過 SharePoint 同步至本機 |
-| 分發方式 | 可攜式 .exe 獨立分享，可離線運作 |
-| 使用者數量 | 多台獨立電腦，單使用者模式 |
+| 項目         | 說明                                                                    |
+| ------------ | ----------------------------------------------------------------------- |
+| 目標作業系統 | Windows 10/11                                                           |
+| 網路環境     | 企業內部網路，可存取 SharePoint，有網際網路                             |
+| 安裝限制     | 無法安裝任何程式，僅能執行可攜式 .exe                                   |
+| 資料來源     | DOCX 檔案透過 SharePoint 同步至本機                                     |
+| 分發方式     | 優先以可攜式 .exe 獨立分享，可離線運作. (可以評估是否以 'dir' 方式打包) |
+| 使用者數量   | 多台獨立電腦，單使用者模式                                              |
 
 ### 1.4 關鍵約束
 
@@ -102,21 +103,21 @@ graph LR
 
 ### 2.2 詳細差距清單
 
-| 類別 | 元件 | 現況 | 目標 | 差距 | 優先級 |
-|------|------|------|------|------|--------|
-| 解析器 | `parsers/docx_parser.py` | 不存在 | DOCX 解析 + Line 提取 | 全新開發 | P0 |
-| 解析器 | `parsers/manpower_parser.py` | 不存在 | 人力班次解析 | 全新開發 | P0 |
-| 工具 | `config.py` | 不存在 | JSON 設定讀寫 | 全新開發 | P0 |
-| 工具 | `utils/excel_export.py` | 不存在 | Excel 匯出工具 | 全新開發 | P1 |
-| 前端 | React SPA | 不存在 | 7 個頁面 + 圖表 | 全新開發 | P0 |
-| 前端 | Zustand Store | 不存在 | 狀態管理 | 全新開發 | P0 |
-| 前端 | i18n 模組 | 不存在 | 中英文切換 | 全新開發 | P1 |
-| 桌面 | Electron Main | 不存在 | 視窗 + Sidecar 管理 | 全新開發 | P0 |
-| 桌面 | Electron Preload | 不存在 | IPC 橋接 | 全新開發 | P0 |
-| 建置 | electron-builder | 不存在 | 可攜式 .exe 打包 | 全新配置 | P0 |
-| 後端 | `backend/main.py` | 已存在 | 加入 `--port` CLI 參數 | 小幅修改 | P0 |
-| 後端 | `routers/config.py` | tkinter browse | Electron 原生對話框 | 移除 tkinter | P1 |
-| 後端 | `analysis/__init__.py` | 匯出名稱錯誤 | 修正 `get_work_access_analysis` | Bug 修正 | P2 |
+| 類別   | 元件                           | 現況           | 目標                              | 差距         | 優先級 |
+| ------ | ------------------------------ | -------------- | --------------------------------- | ------------ | ------ |
+| 解析器 | `parsers/docx_parser.py`     | 不存在         | DOCX 解析 + Line 提取             | 全新開發     | P0     |
+| 解析器 | `parsers/manpower_parser.py` | 不存在         | 人力班次解析                      | 全新開發     | P0     |
+| 工具   | `config.py`                  | 不存在         | JSON 設定讀寫                     | 全新開發     | P0     |
+| 工具   | `utils/excel_export.py`      | 不存在         | Excel 匯出工具                    | 全新開發     | P1     |
+| 前端   | React SPA                      | 不存在         | 7 個頁面 + 圖表                   | 全新開發     | P0     |
+| 前端   | Zustand Store                  | 不存在         | 狀態管理                          | 全新開發     | P0     |
+| 前端   | i18n 模組                      | 不存在         | 中英文切換                        | 全新開發     | P1     |
+| 桌面   | Electron Main                  | 不存在         | 視窗 + Sidecar 管理               | 全新開發     | P0     |
+| 桌面   | Electron Preload               | 不存在         | IPC 橋接                          | 全新開發     | P0     |
+| 建置   | electron-builder               | 不存在         | 可攜式 .exe 打包                  | 全新配置     | P0     |
+| 後端   | `backend/main.py`            | 已存在         | 加入 `--port` CLI 參數          | 小幅修改     | P0     |
+| 後端   | `routers/config.py`          | tkinter browse | Electron 原生對話框               | 移除 tkinter | P1     |
+| 後端   | `analysis/__init__.py`       | 匯出名稱錯誤   | 修正 `get_work_access_analysis` | Bug 修正     | P2     |
 
 ### 2.3 外部依賴模組規格
 
@@ -208,15 +209,16 @@ gantt
 
 #### 3.2.1 專案腳手架
 
-| 步驟 | 任務 | 產出 |
-|------|------|------|
-| 0.1 | 初始化 monorepo 結構 | `package.json`, `pyproject.toml` |
-| 0.2 | 配置 Vite + React + TypeScript | `frontend/` 目錄 |
-| 0.3 | 配置 Tailwind CSS + Preline UI | `tailwind.config.js` |
-| 0.4 | 配置 ESLint + Prettier | `.eslintrc`, `.prettierrc` |
-| 0.5 | 配置 pytest + coverage | `pytest.ini`, `conftest.py` |
+| 步驟 | 任務                           | 產出                                 |
+| ---- | ------------------------------ | ------------------------------------ |
+| 0.1  | 初始化 monorepo 結構           | `package.json`, `pyproject.toml` |
+| 0.2  | 配置 Vite + React + TypeScript | `frontend/` 目錄                   |
+| 0.3  | 配置 Tailwind CSS + Preline UI | `tailwind.config.js`               |
+| 0.4  | 配置 ESLint + Prettier         | `.eslintrc`, `.prettierrc`       |
+| 0.5  | 配置 pytest + coverage         | `pytest.ini`, `conftest.py`      |
 
 目標目錄結構：
+
 ```
 mtr_duat/
 ├── frontend/                    # React SPA（從零建立）
@@ -264,41 +266,43 @@ graph TD
 
 #### 3.3.1 docx_parser 開發
 
-| 步驟 | 任務 | 驗收標準 |
-|------|------|----------|
-| 1.1 | 實作 `DailyReportParser` 類別 | 可掃描資料夾中的 DOCX 檔案 |
-| 1.2 | 實作藍色文字偵測邏輯 | 正確識別 CBM/CM/PA work/HLM/Provide |
-| 1.3 | 實作項目代碼提取（C#### 格式） | 正確提取 Project 和 Qty Delivered |
-| 1.4 | 實作鐵路線代碼提取（regex） | 正確匹配 KTL/TCL/AEL 等 10 條線 |
-| 1.5 | 實作 progress_callback 機制 | 背景解析時可回報進度 |
-| 1.6 | 實作夜班零數量記錄邏輯 | 夜班藍色關鍵字產生 qty=0 記錄 |
-| 1.7 | 錯誤處理：損壞檔案跳過 | 記錄錯誤並繼續處理 |
+| 步驟 | 任務                            | 驗收標準                            |
+| ---- | ------------------------------- | ----------------------------------- |
+| 1.1  | 實作 `DailyReportParser` 類別 | 可掃描資料夾中的 DOCX 檔案          |
+| 1.2  | 實作藍色文字偵測邏輯            | 正確識別 CBM/CM/PA work/HLM/Provide |
+| 1.3  | 實作項目代碼提取（C#### 格式）  | 正確提取 Project 和 Qty Delivered   |
+| 1.4  | 實作鐵路線代碼提取（regex）     | 正確匹配 KTL/TCL/AEL 等 10 條線     |
+| 1.5  | 實作 progress_callback 機制     | 背景解析時可回報進度                |
+| 1.6  | 實作夜班零數量記錄邏輯          | 夜班藍色關鍵字產生 qty=0 記錄       |
+| 1.7  | 錯誤處理：損壞檔案跳過          | 記錄錯誤並繼續處理                  |
 
 關鍵演算法（參見 [algorithm.md](algorithm.md)）：
+
 - 藍色文字偵測：檢查 `run.font.color.rgb` 是否為藍色系
 - Line 提取：regex `\b(KTL|TCL|AEL|TWL|ISL|TKL|EAL|SIL|TML|DRL)\b`
 - 檔案匹配：glob `PS-OHLR_DUAT_Daily Report_*.docx`，排除 `~$` 前綴
 
 #### 3.3.2 manpower_parser 開發
 
-| 步驟 | 任務 | 驗收標準 |
-|------|------|----------|
-| 1.8 | 實作 `ManpowerParser` 類別 | 可解析 DOCX 第二個表格 |
-| 1.9 | 實作班次內容分段邏輯 | 正確分割 HLM/C&R/Attendance 區段 |
-| 1.10 | 實作工作項目提取 | 正確識別 job type, project_code, qty |
-| 1.11 | 實作 EPIC 角色解析 | 正確提取 CP_P/CP_T/AP_E/SPC/HSM/NP |
-| 1.12 | 實作團隊計數解析（S2-S5） | 正確解析 "S2x3, S3x2" 格式 |
-| 1.13 | 實作請假資料分類 | 正確分類 AL/SH/SL/RD/Training |
+| 步驟 | 任務                         | 驗收標準                             |
+| ---- | ---------------------------- | ------------------------------------ |
+| 1.8  | 實作 `ManpowerParser` 類別 | 可解析 DOCX 第二個表格               |
+| 1.9  | 實作班次內容分段邏輯         | 正確分割 HLM/C&R/Attendance 區段     |
+| 1.10 | 實作工作項目提取             | 正確識別 job type, project_code, qty |
+| 1.11 | 實作 EPIC 角色解析           | 正確提取 CP_P/CP_T/AP_E/SPC/HSM/NP   |
+| 1.12 | 實作團隊計數解析（S2-S5）    | 正確解析 "S2x3, S3x2" 格式           |
+| 1.13 | 實作請假資料分類             | 正確分類 AL/SH/SL/RD/Training        |
 
 #### 3.3.3 config + excel_export 開發
 
-| 步驟 | 任務 | 驗收標準 |
-|------|------|----------|
-| 1.14 | 實作 `config.py` | JSON 讀寫 + DEFAULT_CONFIG 合併 |
-| 1.15 | 設定檔路徑策略 | 可攜式：與 .exe 同目錄下 `config.json` |
-| 1.16 | 實作 `excel_export.py` | 3 個匯出函式通過測試 |
+| 步驟 | 任務                     | 驗收標準                                 |
+| ---- | ------------------------ | ---------------------------------------- |
+| 1.14 | 實作 `config.py`       | JSON 讀寫 + DEFAULT_CONFIG 合併          |
+| 1.15 | 設定檔路徑策略           | 可攜式：與 .exe 同目錄下 `config.json` |
+| 1.16 | 實作 `excel_export.py` | 3 個匯出函式通過測試                     |
 
 設定檔路徑策略（可攜式環境）：
+
 ```python
 # 不使用 ~/.mtr_duat_config.json（可能無寫入權限）
 # 改為與執行檔同目錄
@@ -310,11 +314,11 @@ if not config_path.parent.exists():
 
 #### 3.3.4 後端修改
 
-| 步驟 | 任務 | 影響範圍 |
-|------|------|----------|
+| 步驟 | 任務                                         | 影響範圍 |
+| ---- | -------------------------------------------- | -------- |
 | 1.17 | `backend/main.py` 加入 `--port` CLI 參數 | 1 個檔案 |
-| 1.18 | `routers/config.py` 移除 tkinter browse | 1 個端點 |
-| 1.19 | `analysis/__init__.py` 修正匯出名稱 | 1 行 |
+| 1.18 | `routers/config.py` 移除 tkinter browse    | 1 個端點 |
+| 1.19 | `analysis/__init__.py` 修正匯出名稱        | 1 行     |
 
 ### 3.4 Phase 2：前端開發（預計 20 天）
 
@@ -363,28 +367,28 @@ graph TD
     P3 --> P7["7. ManpowerPage<br/>KPI + 角色分析"]
 ```
 
-| 順序 | 頁面 | 主要元件 | API 端點 |
-|------|------|----------|----------|
-| 1 | HomePage | FolderPicker, ParseProgress | `/api/config`, `/api/parse/*` |
-| 2 | GeneratePage | AnalyzeButton, ExcelUpload | `/api/dashboard/analyze`, `/api/dashboard/load-excel` |
-| 3 | DashboardPage | StatsCards, 6 Charts, DataTable | `/api/dashboard/*` (12 端點) |
-| 4 | LagAnalysisPage | FileUpload, ConfigEditor, ResultTable | `/api/lag/*` (6 端點) |
-| 5 | PerformancePage | ProjectSelector, PerfChart, CumulativeChart | `/api/performance/*` (8 端點) |
-| 6 | KeywordSearchPage | SearchInput, ResultList | `/api/keyword/search` |
-| 7 | ManpowerPage | KPICards, RoleTable, TeamChart | `/api/manpower/*` (3 端點) |
+| 順序 | 頁面              | 主要元件                                    | API 端點                                                  |
+| ---- | ----------------- | ------------------------------------------- | --------------------------------------------------------- |
+| 1    | HomePage          | FolderPicker, ParseProgress                 | `/api/config`, `/api/parse/*`                         |
+| 2    | GeneratePage      | AnalyzeButton, ExcelUpload                  | `/api/dashboard/analyze`, `/api/dashboard/load-excel` |
+| 3    | DashboardPage     | StatsCards, 6 Charts, DataTable             | `/api/dashboard/*` (12 端點)                            |
+| 4    | LagAnalysisPage   | FileUpload, ConfigEditor, ResultTable       | `/api/lag/*` (6 端點)                                   |
+| 5    | PerformancePage   | ProjectSelector, PerfChart, CumulativeChart | `/api/performance/*` (8 端點)                           |
+| 6    | KeywordSearchPage | SearchInput, ResultList                     | `/api/keyword/search`                                   |
+| 7    | ManpowerPage      | KPICards, RoleTable, TeamChart              | `/api/manpower/*` (3 端點)                              |
 
 ### 3.5 Phase 3：Electron 整合（預計 10 天）
 
 #### 3.5.1 Electron Shell 開發
 
-| 步驟 | 任務 | 產出 |
-|------|------|------|
-| 3.1 | `electron/main.js` — BrowserWindow 建立 | 視窗管理 |
-| 3.2 | `electron/sidecar.js` — Sidecar 管理器 | spawn/kill/health-poll |
-| 3.3 | `electron/preload.js` — IPC 橋接 | `window.electronAPI` |
-| 3.4 | 原生檔案對話框 | `dialog:openDirectory`, `dialog:openFile` |
-| 3.5 | 載入畫面（等待 Sidecar 就緒） | Loading screen |
-| 3.6 | 錯誤處理（Sidecar 啟動失敗） | 重試/退出對話框 |
+| 步驟 | 任務                                       | 產出                                          |
+| ---- | ------------------------------------------ | --------------------------------------------- |
+| 3.1  | `electron/main.js` — BrowserWindow 建立 | 視窗管理                                      |
+| 3.2  | `electron/sidecar.js` — Sidecar 管理器  | spawn/kill/health-poll                        |
+| 3.3  | `electron/preload.js` — IPC 橋接        | `window.electronAPI`                        |
+| 3.4  | 原生檔案對話框                             | `dialog:openDirectory`, `dialog:openFile` |
+| 3.5  | 載入畫面（等待 Sidecar 就緒）              | Loading screen                                |
+| 3.6  | 錯誤處理（Sidecar 啟動失敗）               | 重試/退出對話框                               |
 
 #### 3.5.2 Sidecar 生命週期
 
@@ -434,6 +438,7 @@ graph TD
 ```
 
 electron-builder 配置要點：
+
 ```json
 {
   "appId": "com.mtr.duat",
@@ -456,14 +461,14 @@ electron-builder 配置要點：
 
 #### 3.6.2 可攜式 .exe 驗證清單
 
-| 驗證項目 | 測試方法 |
-|----------|----------|
-| 無 Python 環境啟動 | 在乾淨 Windows VM 上執行 |
-| 無 Node.js 環境啟動 | 在乾淨 Windows VM 上執行 |
-| 從 USB 隨身碟執行 | 複製至 USB 後直接執行 |
-| 從 SharePoint 同步資料夾讀取 DOCX | 指向 SharePoint 同步路徑 |
-| 設定檔持久化 | 關閉後重開，驗證設定保留 |
-| 多實例防護 | 同時啟動兩次，第二次應提示 |
+| 驗證項目                          | 測試方法                   |
+| --------------------------------- | -------------------------- |
+| 無 Python 環境啟動                | 在乾淨 Windows VM 上執行   |
+| 無 Node.js 環境啟動               | 在乾淨 Windows VM 上執行   |
+| 從 USB 隨身碟執行                 | 複製至 USB 後直接執行      |
+| 從 SharePoint 同步資料夾讀取 DOCX | 指向 SharePoint 同步路徑   |
+| 設定檔持久化                      | 關閉後重開，驗證設定保留   |
+| 多實例防護                        | 同時啟動兩次，第二次應提示 |
 
 ---
 
@@ -494,58 +499,61 @@ graph TD
 
 #### 4.2.1 `analysis/dashboard.py` — 品質：良好
 
-| 項目 | 評估 | 說明 |
-|------|------|------|
-| 函式大小 | 通過 | 所有函式 < 50 行 |
-| 錯誤處理 | 通過 | try/except + logger |
-| 型別提示 | 通過 | 完整的 type hints |
+| 項目     | 評估 | 說明                                                      |
+| -------- | ---- | --------------------------------------------------------- |
+| 函式大小 | 通過 | 所有函式 < 50 行                                          |
+| 錯誤處理 | 通過 | try/except + logger                                       |
+| 型別提示 | 通過 | 完整的 type hints                                         |
 | 不可變性 | 部分 | `df.copy()` 使用正確，但 DashboardAnalyzer 內部狀態可變 |
-| 測試覆蓋 | 缺失 | 無單元測試 |
+| 測試覆蓋 | 缺失 | 無單元測試                                                |
 
 發現問題：
+
 - `get_monthly_trend` 中 Week 轉 Month 的近似公式 `((Week-1) // 4.33 + 1)` 在邊界情況可能不準確
 - `get_weekly_trend` 硬編碼關鍵字列表 `['CBM', 'CM', 'PA work', 'HLM', 'Provide']`，應從 config 讀取
 
 #### 4.2.2 `analysis/lag_analysis.py` — 品質：良好
 
-| 項目 | 評估 | 說明 |
-|------|------|------|
+| 項目     | 評估 | 說明                                             |
+| -------- | ---- | ------------------------------------------------ |
 | 函式大小 | 通過 | `load_project_master` 較長（~70 行）但邏輯清晰 |
-| 欄位映射 | 良好 | 不區分大小寫 + fallback 策略 |
-| 核心公式 | 正確 | 線性插值邏輯正確 |
-| 測試覆蓋 | 缺失 | 無單元測試 |
+| 欄位映射 | 良好 | 不區分大小寫 + fallback 策略                     |
+| 核心公式 | 正確 | 線性插值邏輯正確                                 |
+| 測試覆蓋 | 缺失 | 無單元測試                                       |
 
 發現問題：
+
 - `load_project_master` 中 `elif` 鏈過長，建議重構為映射表
 - `_match_productivity` 硬編碼欄位名稱搜尋列表
 
 #### 4.2.3 `analysis/performance.py` — 品質：良好
 
-| 項目 | 評估 | 說明 |
-|------|------|------|
-| matplotlib 後端 | 正確 | 使用 `Agg` 非互動後端 |
-| base64 輸出 | 正確 | 圖表正確編碼為 PNG |
-| 記憶體管理 | 通過 | `plt.close(fig)` 正確釋放 |
+| 項目            | 評估 | 說明                        |
+| --------------- | ---- | --------------------------- |
+| matplotlib 後端 | 正確 | 使用 `Agg` 非互動後端     |
+| base64 輸出     | 正確 | 圖表正確編碼為 PNG          |
+| 記憶體管理      | 通過 | `plt.close(fig)` 正確釋放 |
 
 #### 4.2.4 `analysis/scurve.py` — 品質：良好
 
 發現問題：
+
 - 週標籤生成假設每年 52 週，未處理 ISO 8601 中某些年份有 53 週的情況
 
 #### 4.2.5 `analysis/manpower.py` — 品質：優良
 
-| 項目 | 評估 | 說明 |
-|------|------|------|
-| 函式設計 | 優良 | 純函式 + 類別封裝雙層設計 |
-| defaultdict 使用 | 正確 | 適當使用巢狀 defaultdict |
-| Excel 匯出 | 完整 | 4 個 sheet + 格式化 |
+| 項目             | 評估 | 說明                      |
+| ---------------- | ---- | ------------------------- |
+| 函式設計         | 優良 | 純函式 + 類別封裝雙層設計 |
+| defaultdict 使用 | 正確 | 適當使用巢狀 defaultdict  |
+| Excel 匯出       | 完整 | 4 個 sheet + 格式化       |
 
 #### 4.2.6 `backend/routers/config.py` — 品質：需改善
 
-| 項目 | 評估 | 說明 |
-|------|------|------|
-| browse 端點 | 安全風險 | 動態生成 Python 腳本並以 subprocess 執行 |
-| 路徑處理 | 風險 | `safe_path` 使用 f-string 插入腳本，可能有注入風險 |
+| 項目        | 評估     | 說明                                                 |
+| ----------- | -------- | ---------------------------------------------------- |
+| browse 端點 | 安全風險 | 動態生成 Python 腳本並以 subprocess 執行             |
+| 路徑處理    | 風險     | `safe_path` 使用 f-string 插入腳本，可能有注入風險 |
 
 建議：重建時移除 tkinter browse，改用 Electron 原生對話框。
 
@@ -555,13 +563,13 @@ graph TD
 
 ### 4.3 架構層面問題
 
-| 問題 | 嚴重程度 | 建議 |
-|------|----------|------|
-| 全域可變單例（7 個） | 中 | 重建時考慮依賴注入或 FastAPI Depends |
-| 跨路由直接 import | 中 | 使用共享服務層或事件匯流排 |
-| 無測試覆蓋 | 高 | Phase 1 同步開發單元測試 |
-| 無日誌標準化 | 低 | 統一使用 `logging` 模組 + 格式化 |
-| 硬編碼關鍵字 | 低 | 從 config 讀取，支援使用者自訂 |
+| 問題                 | 嚴重程度 | 建議                                 |
+| -------------------- | -------- | ------------------------------------ |
+| 全域可變單例（7 個） | 中       | 重建時考慮依賴注入或 FastAPI Depends |
+| 跨路由直接 import    | 中       | 使用共享服務層或事件匯流排           |
+| 無測試覆蓋           | 高       | Phase 1 同步開發單元測試             |
+| 無日誌標準化         | 低       | 統一使用 `logging` 模組 + 格式化   |
+| 硬編碼關鍵字         | 低       | 從 config 讀取，支援使用者自訂       |
 
 ### 4.4 重建時保留 vs 重寫決策
 
@@ -626,13 +634,13 @@ graph TD
 
 #### 5.2.1 analysis/ 模組測試
 
-| 測試檔案 | 測試目標 | 測試案例數（預估） |
-|----------|----------|-------------------|
-| `test_dashboard.py` | aggregate_records, calculate_summary, trends, distributions | 15 |
-| `test_lag_analysis.py` | get_status, load_project_master, calculate_nth_lag_lead | 12 |
-| `test_performance.py` | calculate_performance_metrics, get_recovery_path | 10 |
-| `test_scurve.py` | calculate_scurve_data, week label 生成 | 8 |
-| `test_manpower.py` | headcount, team_dist, job_type, role_freq, work_access | 15 |
+| 測試檔案                 | 測試目標                                                    | 測試案例數（預估） |
+| ------------------------ | ----------------------------------------------------------- | ------------------ |
+| `test_dashboard.py`    | aggregate_records, calculate_summary, trends, distributions | 15                 |
+| `test_lag_analysis.py` | get_status, load_project_master, calculate_nth_lag_lead     | 12                 |
+| `test_performance.py`  | calculate_performance_metrics, get_recovery_path            | 10                 |
+| `test_scurve.py`       | calculate_scurve_data, week label 生成                      | 8                  |
+| `test_manpower.py`     | headcount, team_dist, job_type, role_freq, work_access      | 15                 |
 
 關鍵測試案例：
 
@@ -661,15 +669,15 @@ class TestGetStatus:
 
 #### 5.2.2 parsers/ 模組測試
 
-| 測試案例 | 說明 |
-|----------|------|
-| 正常 DOCX 解析 | 使用測試用 DOCX 檔案驗證完整解析流程 |
-| 藍色文字偵測 | 驗證 CBM/CM/PA work 等關鍵字正確識別 |
-| 夜班零數量 | 驗證夜班藍色關鍵字產生 qty=0 |
-| 鐵路線提取 | 驗證 10 條線代碼正確匹配 |
-| 損壞檔案處理 | 驗證損壞 DOCX 不導致崩潰 |
-| 空資料夾 | 驗證空資料夾回傳空列表 |
-| `~$` 暫存檔排除 | 驗證暫存檔被正確跳過 |
+| 測試案例          | 說明                                 |
+| ----------------- | ------------------------------------ |
+| 正常 DOCX 解析    | 使用測試用 DOCX 檔案驗證完整解析流程 |
+| 藍色文字偵測      | 驗證 CBM/CM/PA work 等關鍵字正確識別 |
+| 夜班零數量        | 驗證夜班藍色關鍵字產生 qty=0         |
+| 鐵路線提取        | 驗證 10 條線代碼正確匹配             |
+| 損壞檔案處理      | 驗證損壞 DOCX 不導致崩潰             |
+| 空資料夾          | 驗證空資料夾回傳空列表               |
+| `~$` 暫存檔排除 | 驗證暫存檔被正確跳過                 |
 
 #### 5.2.3 測試資料準備
 
@@ -695,27 +703,27 @@ tests/
 
 ### 5.3 整合測試計劃
 
-| 測試場景 | 步驟 | 驗證 |
-|----------|------|------|
-| 完整解析流程 | parse/folder -> parse/progress -> parse/results | records 數量 > 0 |
-| 儀表板分析 | dashboard/analyze -> dashboard/stats | stats 包含正確欄位 |
-| 滯後分析流程 | lag/load-master -> lag/calculate -> lag/results | results 包含 Status |
-| 績效分析流程 | performance/set-data -> performance/analyze | metrics 包含 success_rate |
-| S-Curve 流程 | scurve/set-data -> scurve/calculate | 回傳 week_labels + data |
-| 匯出流程 | export/dashboard | 回傳有效 Excel 檔案 |
-| 人力分析流程 | manpower/scan -> manpower/analysis | kpis 包含 total_jobs |
+| 測試場景     | 步驟                                            | 驗證                      |
+| ------------ | ----------------------------------------------- | ------------------------- |
+| 完整解析流程 | parse/folder -> parse/progress -> parse/results | records 數量 > 0          |
+| 儀表板分析   | dashboard/analyze -> dashboard/stats            | stats 包含正確欄位        |
+| 滯後分析流程 | lag/load-master -> lag/calculate -> lag/results | results 包含 Status       |
+| 績效分析流程 | performance/set-data -> performance/analyze     | metrics 包含 success_rate |
+| S-Curve 流程 | scurve/set-data -> scurve/calculate             | 回傳 week_labels + data   |
+| 匯出流程     | export/dashboard                                | 回傳有效 Excel 檔案       |
+| 人力分析流程 | manpower/scan -> manpower/analysis              | kpis 包含 total_jobs      |
 
 ### 5.4 端對端測試計劃
 
-| 測試場景 | 前置條件 | 操作 | 預期結果 |
-|----------|----------|------|----------|
-| 首次啟動 | 乾淨環境 | 啟動 .exe | 顯示首頁，Sidecar 就緒 |
-| 資料夾解析 | 有 DOCX 檔案 | 選擇資料夾 -> 解析 | 進度條 -> 完成通知 |
-| 儀表板瀏覽 | 已解析數據 | 切換各圖表 | 圖表正確渲染 |
-| Excel 匯出 | 已分析數據 | 點擊匯出 | 下載有效 Excel |
-| 語言切換 | 任何頁面 | 切換中/英文 | 所有文字更新 |
-| 設定持久化 | 已修改設定 | 關閉 -> 重開 | 設定保留 |
-| 離線運作 | 斷開網路 | 所有功能 | 正常運作 |
+| 測試場景   | 前置條件     | 操作               | 預期結果               |
+| ---------- | ------------ | ------------------ | ---------------------- |
+| 首次啟動   | 乾淨環境     | 啟動 .exe          | 顯示首頁，Sidecar 就緒 |
+| 資料夾解析 | 有 DOCX 檔案 | 選擇資料夾 -> 解析 | 進度條 -> 完成通知     |
+| 儀表板瀏覽 | 已解析數據   | 切換各圖表         | 圖表正確渲染           |
+| Excel 匯出 | 已分析數據   | 點擊匯出           | 下載有效 Excel         |
+| 語言切換   | 任何頁面     | 切換中/英文        | 所有文字更新           |
+| 設定持久化 | 已修改設定   | 關閉 -> 重開       | 設定保留               |
+| 離線運作   | 斷開網路     | 所有功能           | 正常運作               |
 
 ### 5.5 測試執行命令
 
@@ -780,15 +788,15 @@ graph TD
 
 ### 6.2 重建時必須精確保留的邏輯
 
-| 演算法 | 檔案 | 重要性 | 原因 |
-|--------|------|--------|------|
-| NTH Lag/Lead 線性插值 | `lag_analysis.py` | 關鍵 | 直接影響項目狀態判定 |
-| 狀態閾值分類 | `lag_analysis.py:get_status` | 關鍵 | 5 級閾值不可更改 |
-| 藍色文字偵測 | `docx_parser.py`（新） | 關鍵 | 決定工作類型識別 |
-| S-Curve 累計計算 | `scurve.py` | 高 | 影響進度圖表準確性 |
-| 績效 current_pace | `performance.py` | 高 | 12 週滑動窗口 |
-| 人力 work_access 分類 | `manpower.py` | 中 | SPA > PA > Possession > Other 優先順序 |
-| Project Master 欄位映射 | `lag_analysis.py` | 高 | 不區分大小寫 + fallback 策略 |
+| 演算法                  | 檔案                           | 重要性 | 原因                                   |
+| ----------------------- | ------------------------------ | ------ | -------------------------------------- |
+| NTH Lag/Lead 線性插值   | `lag_analysis.py`            | 關鍵   | 直接影響項目狀態判定                   |
+| 狀態閾值分類            | `lag_analysis.py:get_status` | 關鍵   | 5 級閾值不可更改                       |
+| 藍色文字偵測            | `docx_parser.py`（新）       | 關鍵   | 決定工作類型識別                       |
+| S-Curve 累計計算        | `scurve.py`                  | 高     | 影響進度圖表準確性                     |
+| 績效 current_pace       | `performance.py`             | 高     | 12 週滑動窗口                          |
+| 人力 work_access 分類   | `manpower.py`                | 中     | SPA > PA > Possession > Other 優先順序 |
+| Project Master 欄位映射 | `lag_analysis.py`            | 高     | 不區分大小寫 + fallback 策略           |
 
 ### 6.3 DOCX 解析器演算法（需新開發）
 
@@ -836,15 +844,15 @@ quadrantChart
 
 ### 7.2 風險清單
 
-| 風險 | 機率 | 影響 | 緩解策略 |
-|------|------|------|----------|
-| PyInstaller 打包失敗（缺少依賴） | 高 | 高 | 早期 Phase 0 驗證打包流程，建立 CI 自動打包 |
-| Electron 可攜式 .exe 體積過大 | 高 | 中 | 使用 `--onedir` 而非 `--onefile`，壓縮資源 |
-| SharePoint 同步路徑含空格/中文 | 中 | 中 | 所有路徑處理使用 `Path` 物件，測試中文路徑 |
-| DOCX 格式變更導致解析失敗 | 低 | 高 | 解析器設計為容錯模式，記錄錯誤並繼續 |
-| 前端從零開發延遲 | 高 | 中 | 優先開發核心頁面（Home + Dashboard），其餘迭代 |
-| 企業防火牆阻擋 localhost 通訊 | 低 | 高 | 使用 `127.0.0.1` 而非 `localhost`，避免 DNS 解析 |
-| 設定檔寫入權限不足 | 中 | 低 | Fallback 至 `%APPDATA%` 或唯讀模式 |
+| 風險                             | 機率 | 影響 | 緩解策略                                             |
+| -------------------------------- | ---- | ---- | ---------------------------------------------------- |
+| PyInstaller 打包失敗（缺少依賴） | 高   | 高   | 早期 Phase 0 驗證打包流程，建立 CI 自動打包          |
+| Electron 可攜式 .exe 體積過大    | 高   | 中   | 使用 `--onedir` 而非 `--onefile`，壓縮資源       |
+| SharePoint 同步路徑含空格/中文   | 中   | 中   | 所有路徑處理使用 `Path` 物件，測試中文路徑         |
+| DOCX 格式變更導致解析失敗        | 低   | 高   | 解析器設計為容錯模式，記錄錯誤並繼續                 |
+| 前端從零開發延遲                 | 高   | 中   | 優先開發核心頁面（Home + Dashboard），其餘迭代       |
+| 企業防火牆阻擋 localhost 通訊    | 低   | 高   | 使用 `127.0.0.1` 而非 `localhost`，避免 DNS 解析 |
+| 設定檔寫入權限不足               | 中   | 低   | Fallback 至 `%APPDATA%` 或唯讀模式                 |
 
 ---
 
@@ -860,15 +868,15 @@ graph LR
     M5 --> M6["M6: UAT 完成<br/>使用者驗收"]
 ```
 
-| 里程碑 | 交付物 | 驗收標準 |
-|--------|--------|----------|
-| M0 | 專案腳手架 | `npm run dev` + `pytest` 可執行 |
-| M1 | 後端完善 | 所有 38 個 API 端點可正常回應，單元測試 80%+ |
-| M2 | 前端 MVP | Home + Dashboard 頁面可操作，圖表正確渲染 |
-| M3 | 前端完整 | 全部 7 個頁面功能完整，i18n 中英文切換 |
-| M4 | Electron 整合 | 桌面應用可啟動，Sidecar 自動管理 |
-| M5 | 可攜式 .exe | 在乾淨 Windows VM 上成功執行 |
-| M6 | UAT 完成 | 使用者確認所有功能符合需求 |
+| 里程碑 | 交付物        | 驗收標準                                     |
+| ------ | ------------- | -------------------------------------------- |
+| M0     | 專案腳手架    | `npm run dev` + `pytest` 可執行          |
+| M1     | 後端完善      | 所有 38 個 API 端點可正常回應，單元測試 80%+ |
+| M2     | 前端 MVP      | Home + Dashboard 頁面可操作，圖表正確渲染    |
+| M3     | 前端完整      | 全部 7 個頁面功能完整，i18n 中英文切換       |
+| M4     | Electron 整合 | 桌面應用可啟動，Sidecar 自動管理             |
+| M5     | 可攜式 .exe   | 在乾淨 Windows VM 上成功執行                 |
+| M6     | UAT 完成      | 使用者確認所有功能符合需求                   |
 
 ---
 
@@ -876,14 +884,14 @@ graph LR
 
 ### 9.1 開發機器需求
 
-| 項目 | 最低需求 | 建議配置 |
-|------|----------|----------|
+| 項目     | 最低需求          | 建議配置          |
+| -------- | ----------------- | ----------------- |
 | 作業系統 | Windows 10 64-bit | Windows 11 64-bit |
-| RAM | 8 GB | 16 GB |
-| 磁碟空間 | 10 GB（含依賴） | 20 GB |
-| Python | 3.12+ | 3.12.x |
-| Node.js | 18.x LTS | 20.x LTS |
-| npm | 9.x | 10.x |
+| RAM      | 8 GB              | 16 GB             |
+| 磁碟空間 | 10 GB（含依賴）   | 20 GB             |
+| Python   | 3.12+             | 3.12.x            |
+| Node.js  | 18.x LTS          | 20.x LTS          |
+| npm      | 9.x               | 10.x              |
 
 ### 9.2 開發工具鏈
 
@@ -958,18 +966,19 @@ sequenceDiagram
 ```
 
 開發模式下三個進程獨立運行：
+
 1. FastAPI 後端：`python backend/main.py --port 8000`（支援 hot reload）
 2. Vite Dev Server：`cd frontend && npm run dev`（HMR 熱更新）
 3. Electron Shell：`npm run electron:dev`（載入 Vite dev server URL）
 
 ### 9.5 環境變數
 
-| 變數 | 用途 | 開發預設值 | 生產值 |
-|------|------|-----------|--------|
-| `DUAT_ENV` | 環境標識 | `development` | `production` |
-| `DUAT_BACKEND_PORT` | 後端固定 port（開發用） | `8000` | 動態分配 |
-| `DUAT_LOG_LEVEL` | 日誌級別 | `DEBUG` | `WARNING` |
-| `DUAT_CONFIG_PATH` | 設定檔路徑覆寫 | `./mtr_duat_config.json` | 與 .exe 同目錄 |
+| 變數                  | 用途                    | 開發預設值                 | 生產值         |
+| --------------------- | ----------------------- | -------------------------- | -------------- |
+| `DUAT_ENV`          | 環境標識                | `development`            | `production` |
+| `DUAT_BACKEND_PORT` | 後端固定 port（開發用） | `8000`                   | 動態分配       |
+| `DUAT_LOG_LEVEL`    | 日誌級別                | `DEBUG`                  | `WARNING`    |
+| `DUAT_CONFIG_PATH`  | 設定檔路徑覆寫          | `./mtr_duat_config.json` | 與 .exe 同目錄 |
 
 ---
 
@@ -979,27 +988,27 @@ sequenceDiagram
 
 #### 生產依賴 (`requirements.txt`)
 
-| 套件 | 版本 | 用途 | 大小影響 |
-|------|------|------|----------|
-| fastapi | >=0.115 | REST API 框架 | 小 |
-| uvicorn[standard] | >=0.30 | ASGI 伺服器 | 小 |
-| pandas | >=2.2 | 數據處理 | 大（~50MB） |
-| numpy | >=1.26 | 數值計算 | 大（~30MB） |
-| python-docx | >=1.1 | DOCX 解析 | 小 |
-| openpyxl | >=3.1 | Excel 讀寫 | 中 |
-| matplotlib | >=3.9 | 圖表生成（後端） | 大（~40MB） |
-| python-multipart | >=0.0.9 | 檔案上傳 | 小 |
+| 套件              | 版本    | 用途             | 大小影響    |
+| ----------------- | ------- | ---------------- | ----------- |
+| fastapi           | >=0.115 | REST API 框架    | 小          |
+| uvicorn[standard] | >=0.30  | ASGI 伺服器      | 小          |
+| pandas            | >=2.2   | 數據處理         | 大（~50MB） |
+| numpy             | >=1.26  | 數值計算         | 大（~30MB） |
+| python-docx       | >=1.1   | DOCX 解析        | 小          |
+| openpyxl          | >=3.1   | Excel 讀寫       | 中          |
+| matplotlib        | >=3.9   | 圖表生成（後端） | 大（~40MB） |
+| python-multipart  | >=0.0.9 | 檔案上傳         | 小          |
 
 #### 開發依賴 (`requirements-dev.txt`)
 
-| 套件 | 用途 |
-|------|------|
-| pytest | 測試框架 |
-| pytest-cov | 覆蓋率報告 |
-| pytest-asyncio | 非同步測試 |
-| httpx | FastAPI TestClient |
-| pyinstaller | Python 打包 |
-| ruff | Linter + Formatter |
+| 套件           | 用途               |
+| -------------- | ------------------ |
+| pytest         | 測試框架           |
+| pytest-cov     | 覆蓋率報告         |
+| pytest-asyncio | 非同步測試         |
+| httpx          | FastAPI TestClient |
+| pyinstaller    | Python 打包        |
+| ruff           | Linter + Formatter |
 
 ### 10.2 前端依賴
 
@@ -1028,33 +1037,33 @@ graph TD
     Core --> State
 ```
 
-| 套件 | 版本 | 用途 |
-|------|------|------|
-| react | ^18.3 | UI 框架 |
-| react-dom | ^18.3 | DOM 渲染 |
-| react-router-dom | ^6.26 | 客戶端路由 |
-| zustand | ^4.5 | 狀態管理 |
-| chart.js | ^4.4 | 圖表庫 |
-| react-chartjs-2 | ^5.2 | Chart.js React 封裝 |
-| tailwindcss | ^3.4 | CSS 框架 |
-| preline | ^2.4 | UI 元件庫 |
+| 套件             | 版本  | 用途                |
+| ---------------- | ----- | ------------------- |
+| react            | ^18.3 | UI 框架             |
+| react-dom        | ^18.3 | DOM 渲染            |
+| react-router-dom | ^6.26 | 客戶端路由          |
+| zustand          | ^4.5  | 狀態管理            |
+| chart.js         | ^4.4  | 圖表庫              |
+| react-chartjs-2  | ^5.2  | Chart.js React 封裝 |
+| tailwindcss      | ^3.4  | CSS 框架            |
+| preline          | ^2.4  | UI 元件庫           |
 
 #### 開發依賴
 
-| 套件 | 用途 |
-|------|------|
-| vite | 建置工具 |
+| 套件                 | 用途       |
+| -------------------- | ---------- |
+| vite                 | 建置工具   |
 | @vitejs/plugin-react | React 支援 |
-| typescript | 型別檢查 |
-| eslint + prettier | 程式碼品質 |
-| @playwright/test | E2E 測試 |
-| vitest | 單元測試 |
+| typescript           | 型別檢查   |
+| eslint + prettier    | 程式碼品質 |
+| @playwright/test     | E2E 測試   |
+| vitest               | 單元測試   |
 
 ### 10.3 Electron 依賴
 
-| 套件 | 版本 | 用途 |
-|------|------|------|
-| electron | ^33.x | 桌面外殼 |
+| 套件             | 版本  | 用途     |
+| ---------------- | ----- | -------- |
+| electron         | ^33.x | 桌面外殼 |
 | electron-builder | ^25.x | 打包工具 |
 
 ### 10.4 依賴鎖定策略
@@ -1074,13 +1083,13 @@ graph LR
 
 ### 10.5 PyInstaller 打包體積優化
 
-| 策略 | 預估節省 | 說明 |
-|------|----------|------|
-| `--exclude-module tkinter` | ~15 MB | 重建後不再需要 tkinter |
-| `--exclude-module test` | ~10 MB | 排除測試模組 |
-| `--exclude-module unittest` | ~5 MB | 排除 unittest |
-| matplotlib 後端限制 | ~20 MB | 僅保留 Agg 後端 |
-| UPX 壓縮 | ~30% | 可選，可能影響啟動速度 |
+| 策略                          | 預估節省 | 說明                   |
+| ----------------------------- | -------- | ---------------------- |
+| `--exclude-module tkinter`  | ~15 MB   | 重建後不再需要 tkinter |
+| `--exclude-module test`     | ~10 MB   | 排除測試模組           |
+| `--exclude-module unittest` | ~5 MB    | 排除 unittest          |
+| matplotlib 後端限制           | ~20 MB   | 僅保留 Agg 後端        |
+| UPX 壓縮                      | ~30%     | 可選，可能影響啟動速度 |
 
 預估最終 .exe 體積：150-200 MB（含 Python runtime + 所有依賴）
 
@@ -1115,29 +1124,29 @@ graph TD
 
 ### 11.2 技術債務處理計劃
 
-| ID | 債務 | 嚴重程度 | 處理階段 | 處理方式 |
-|----|------|----------|----------|----------|
-| TD-1 | 全域可變單例 | 嚴重 | Phase 1 | 引入 FastAPI `Depends` 依賴注入 |
-| TD-2 | config browse 安全風險 | 嚴重 | Phase 3 | 移除 tkinter，改用 Electron IPC |
-| TD-3 | `__init__.py` 匯出錯誤 | 嚴重 | Phase 0 | 修正為 `get_work_access_analysis` |
-| TD-4 | 外部模組缺失 | 嚴重 | Phase 1 | 全新開發 4 個模組 |
-| TD-5 | 無測試覆蓋 | 高 | Phase 0-1 | TDD 開發新模組，補寫現有模組測試 |
-| TD-6 | 硬編碼關鍵字 | 高 | Phase 1 | 從 config 讀取，支援使用者自訂 |
-| TD-7 | Week→Month 近似 | 高 | Phase 1 | 改用 `DateObj.dt.month` 精確計算 |
-| TD-8 | 跨路由耦合 | 高 | Phase 1 | 引入共享服務層 |
-| TD-9 | 日誌標準化 | 中 | Phase 2 | 統一 `logging` 模組 + JSON 格式 |
-| TD-10 | CORS 硬編碼 | 中 | Phase 3 | 從環境變數或 config 讀取 |
-| TD-11 | 第 53 週問題 | 中 | Phase 1 | 使用 `isocalendar()` 處理 |
+| ID    | 債務                     | 嚴重程度 | 處理階段  | 處理方式                            |
+| ----- | ------------------------ | -------- | --------- | ----------------------------------- |
+| TD-1  | 全域可變單例             | 嚴重     | Phase 1   | 引入 FastAPI `Depends` 依賴注入   |
+| TD-2  | config browse 安全風險   | 嚴重     | Phase 3   | 移除 tkinter，改用 Electron IPC     |
+| TD-3  | `__init__.py` 匯出錯誤 | 嚴重     | Phase 0   | 修正為 `get_work_access_analysis` |
+| TD-4  | 外部模組缺失             | 嚴重     | Phase 1   | 全新開發 4 個模組                   |
+| TD-5  | 無測試覆蓋               | 高       | Phase 0-1 | TDD 開發新模組，補寫現有模組測試    |
+| TD-6  | 硬編碼關鍵字             | 高       | Phase 1   | 從 config 讀取，支援使用者自訂      |
+| TD-7  | Week→Month 近似         | 高       | Phase 1   | 改用 `DateObj.dt.month` 精確計算  |
+| TD-8  | 跨路由耦合               | 高       | Phase 1   | 引入共享服務層                      |
+| TD-9  | 日誌標準化               | 中       | Phase 2   | 統一 `logging` 模組 + JSON 格式   |
+| TD-10 | CORS 硬編碼              | 中       | Phase 3   | 從環境變數或 config 讀取            |
+| TD-11 | 第 53 週問題             | 中       | Phase 1   | 使用 `isocalendar()` 處理         |
 
 ### 11.3 重建時引入的新技術債務風險
 
-| 風險 | 預防措施 |
-|------|----------|
-| React 元件過大 | 每個元件 < 200 行，提取子元件 |
-| Zustand store 膨脹 | 按功能分割 slices |
-| Electron IPC 過度使用 | 僅用於原生功能，數據走 HTTP |
-| 前後端 API 契約不一致 | 使用 TypeScript 型別定義 + 整合測試 |
-| 打包後路徑問題 | 統一使用 `path.join` + `app.getPath` |
+| 風險                  | 預防措施                                 |
+| --------------------- | ---------------------------------------- |
+| React 元件過大        | 每個元件 < 200 行，提取子元件            |
+| Zustand store 膨脹    | 按功能分割 slices                        |
+| Electron IPC 過度使用 | 僅用於原生功能，數據走 HTTP              |
+| 前後端 API 契約不一致 | 使用 TypeScript 型別定義 + 整合測試      |
+| 打包後路徑問題        | 統一使用 `path.join` + `app.getPath` |
 
 ---
 
@@ -1158,11 +1167,11 @@ graph LR
     V2 --> V4
 ```
 
-| 版本類型 | 觸發條件 | 範例 |
-|----------|----------|------|
-| MAJOR | 架構變更、不相容 API 變更 | 4.0.0 → 5.0.0 |
-| MINOR | 新功能、向後相容 | 4.0.0 → 4.1.0 |
-| PATCH | Bug 修正、安全修補 | 4.0.0 → 4.0.1 |
+| 版本類型 | 觸發條件                  | 範例           |
+| -------- | ------------------------- | -------------- |
+| MAJOR    | 架構變更、不相容 API 變更 | 4.0.0 → 5.0.0 |
+| MINOR    | 新功能、向後相容          | 4.0.0 → 4.1.0 |
+| PATCH    | Bug 修正、安全修補        | 4.0.0 → 4.0.1 |
 
 ### 12.2 發布流程
 
@@ -1197,21 +1206,22 @@ graph TD
 ```
 
 由於 DOCX 報告格式可能隨業務需求變更，解析器設計原則：
+
 1. 容錯優先 — 無法解析的列記錄警告並跳過，不中斷整體流程
 2. 可配置關鍵字 — 工作類型關鍵字從 config 讀取，無需改程式碼
 3. 測試驅動 — 每次格式變更新增對應測試 fixture
 
 ### 12.4 常見問題排查指南
 
-| 問題 | 可能原因 | 排查步驟 |
-|------|----------|----------|
-| .exe 啟動後白屏 | Sidecar 啟動失敗 | 檢查同目錄下 `duat.log`，確認 port 未被佔用 |
-| 解析結果為空 | DOCX 格式不匹配 | 確認檔名符合 `PS-OHLR_DUAT_Daily Report_*.docx` |
-| 圖表不顯示 | Chart.js 數據為空 | 確認已執行「生成儀表板」步驟 |
-| 設定未保存 | 寫入權限不足 | 確認 .exe 所在目錄有寫入權限 |
-| Excel 匯出失敗 | 目標檔案被佔用 | 關閉已開啟的 Excel 檔案後重試 |
-| 滯後分析無結果 | Project Master 欄位不匹配 | 確認 Excel 包含 Project No, Start Date, End Date, Target Qty 欄位 |
-| 語言切換無效 | LocalStorage 損壞 | 清除瀏覽器快取（Electron DevTools → Application → Clear Storage） |
+| 問題            | 可能原因                  | 排查步驟                                                            |
+| --------------- | ------------------------- | ------------------------------------------------------------------- |
+| .exe 啟動後白屏 | Sidecar 啟動失敗          | 檢查同目錄下 `duat.log`，確認 port 未被佔用。開發模式下 `getAppUrl()` 會自動偵測 Vite dev server，連不上則 fallback 至已構建的 `frontend/dist/` |
+| 解析結果為空    | DOCX 格式不匹配           | 確認檔名符合 `PS-OHLR_DUAT_Daily Report_*.docx`                   |
+| 圖表不顯示      | Chart.js 數據為空         | 確認已執行「生成儀表板」步驟                                        |
+| 設定未保存      | 寫入權限不足              | 確認 .exe 所在目錄有寫入權限                                        |
+| Excel 匯出失敗  | 目標檔案被佔用            | 關閉已開啟的 Excel 檔案後重試                                       |
+| 滯後分析無結果  | Project Master 欄位不匹配 | 確認 Excel 包含 Project No, Start Date, End Date, Target Qty 欄位   |
+| 語言切換無效    | i18n 模組未同步          | 已修復：Sidebar `useEffect` 呼叫 `setLocale()`，Layout 以 `key={language}` 強制重新渲染 |
 
 ### 12.5 日誌與監控
 
@@ -1239,11 +1249,13 @@ graph LR
 ```
 
 日誌格式：
+
 ```
 [YYYY-MM-DD HH:MM:SS] [LEVEL] [MODULE] message
 ```
 
 日誌級別：
+
 - `ERROR`：需要使用者注意的錯誤（解析失敗、匯出失敗）
 - `WARNING`：可恢復的問題（設定檔損壞、欄位缺失）
 - `INFO`：正常操作記錄（啟動、解析完成、匯出完成）
@@ -1298,55 +1310,53 @@ graph LR
 
 ### 13.2 完整追溯表
 
-| 需求 ID | 需求名稱 | 實作模組 | 測試檔案 | 驗收標準數 |
-|---------|----------|----------|----------|-----------|
-| R1 | Electron Shell | `electron/main.js`, `electron/sidecar.js`, `electron/preload.js` | `test_electron_lifecycle` | 5 |
-| R2 | FastAPI Sidecar | `backend/main.py` | `test_api_health.py` | 5 |
-| R3 | React SPA | `frontend/src/pages/*.tsx` | `test_pages.spec.ts` | 5 |
-| R4 | DOCX 解析 | `parsers/docx_parser.py` | `test_docx_parser.py` | 7 |
-| R5 | 人力解析 | `parsers/manpower_parser.py` | `test_manpower_parser.py` | 5 |
-| R6 | 儀表板分析 | `analysis/dashboard.py`, `routers/dashboard.py` | `test_dashboard.py` | 6 |
-| R7 | 滯後分析 | `analysis/lag_analysis.py`, `routers/lag.py` | `test_lag_analysis.py` | 4 |
-| R8 | 績效分析 | `analysis/performance.py`, `routers/performance.py` | `test_performance.py` | 3 |
-| R9 | S-Curve | `analysis/scurve.py`, `routers/scurve.py` | `test_scurve.py` | 4 |
-| R10 | 關鍵字搜尋 | `routers/keyword.py` | `test_keyword.py` | 4 |
-| R11 | 人力分析 | `analysis/manpower.py`, `routers/manpower.py` | `test_manpower.py` | 5 |
-| R12 | 國際化 | `frontend/src/lib/i18n.ts` | `test_i18n.spec.ts` | 4 |
-| R13 | 設定持久化 | `config.py`, `routers/config.py` | `test_config.py` | 4 |
-| R14 | 可攜式建置 | `electron-builder.yml`, `pyinstaller.spec` | `test_portable_exe` | 4 |
-| R15 | 欄位映射文件 | `docs/field-mapping-spc.md` | 文件審查 | 4 |
-| R16 | 技術設計文件 | `docs/design.md` | 文件審查 | 4 |
-| R17 | PRD | `docs/prd.md` | 文件審查 | 4 |
-| R18 | 架構文件 | `docs/architecture.md` | 文件審查 | 5 |
+| 需求 ID | 需求名稱        | 實作模組                                                               | 測試檔案                    | 驗收標準數 |
+| ------- | --------------- | ---------------------------------------------------------------------- | --------------------------- | ---------- |
+| R1      | Electron Shell  | `electron/main.js`, `electron/sidecar.js`, `electron/preload.js` | `test_electron_lifecycle` | 5          |
+| R2      | FastAPI Sidecar | `backend/main.py`                                                    | `test_api_health.py`      | 5          |
+| R3      | React SPA       | `frontend/src/pages/*.tsx`                                           | `test_pages.spec.ts`      | 5          |
+| R4      | DOCX 解析       | `parsers/docx_parser.py`                                             | `test_docx_parser.py`     | 7          |
+| R5      | 人力解析        | `parsers/manpower_parser.py`                                         | `test_manpower_parser.py` | 5          |
+| R6      | 儀表板分析      | `analysis/dashboard.py`, `routers/dashboard.py`                    | `test_dashboard.py`       | 6          |
+| R7      | 滯後分析        | `analysis/lag_analysis.py`, `routers/lag.py`                       | `test_lag_analysis.py`    | 4          |
+| R8      | 績效分析        | `analysis/performance.py`, `routers/performance.py`                | `test_performance.py`     | 3          |
+| R9      | S-Curve         | `analysis/scurve.py`, `routers/scurve.py`                          | `test_scurve.py`          | 4          |
+| R10     | 關鍵字搜尋      | `routers/keyword.py`                                                 | `test_keyword.py`         | 4          |
+| R11     | 人力分析        | `analysis/manpower.py`, `routers/manpower.py`                      | `test_manpower.py`        | 5          |
+| R12     | 國際化          | `frontend/src/lib/i18n.ts`                                           | `test_i18n.spec.ts`       | 4          |
+| R13     | 設定持久化      | `config.py`, `routers/config.py`                                   | `test_config.py`          | 4          |
+| R14     | 可攜式建置      | `electron-builder.yml`, `pyinstaller.spec`                         | `test_portable_exe`       | 4          |
+| R15     | 欄位映射文件    | `docs/field-mapping-spc.md`                                          | 文件審查                    | 4          |
+| R16     | 技術設計文件    | `docs/design.md`                                                     | 文件審查                    | 4          |
+| R17     | PRD             | `docs/prd.md`                                                        | 文件審查                    | 4          |
+| R18     | 架構文件        | `docs/architecture.md`                                               | 文件審查                    | 5          |
 
 ### 13.3 Epic → Phase 映射
 
-| Epic | 名稱 | 優先級 | 實作階段 | 依賴 |
-|------|------|--------|----------|------|
-| E1 | Application Shell | P0 | Phase 3 | E2, E3 完成後整合 |
-| E2 | DOCX 解析 | P0 | Phase 1 | Phase 0 腳手架 |
-| E3 | 人力解析 | P0 | Phase 1 | Phase 0 腳手架 |
-| E4 | 儀表板分析 | P0 | Phase 2 | E2 |
-| E5 | 滯後分析 | P0 | Phase 2 | E4 |
-| E6 | 績效追蹤 | P1 | Phase 2 | E4 |
-| E7 | S-Curve | P1 | Phase 2 | E4 |
-| E8 | 關鍵字搜尋 | P1 | Phase 2 | E2 |
-| E9 | 人力分析 | P1 | Phase 2 | E3 |
-| E10 | 國際化 | P1 | Phase 2 | E4 |
-| E11 | 設定持久化 | P2 | Phase 1 | Phase 0 |
-| E12 | 建置分發 | P2 | Phase 4 | 全部 |
-| E13 | 文件 | P2 | 持續 | — |
+| Epic | 名稱              | 優先級 | 實作階段 | 依賴              |
+| ---- | ----------------- | ------ | -------- | ----------------- |
+| E1   | Application Shell | P0     | Phase 3  | E2, E3 完成後整合 |
+| E2   | DOCX 解析         | P0     | Phase 1  | Phase 0 腳手架    |
+| E3   | 人力解析          | P0     | Phase 1  | Phase 0 腳手架    |
+| E4   | 儀表板分析        | P0     | Phase 2  | E2                |
+| E5   | 滯後分析          | P0     | Phase 2  | E4                |
+| E6   | 績效追蹤          | P1     | Phase 2  | E4                |
+| E7   | S-Curve           | P1     | Phase 2  | E4                |
+| E8   | 關鍵字搜尋        | P1     | Phase 2  | E2                |
+| E9   | 人力分析          | P1     | Phase 2  | E3                |
+| E10  | 國際化            | P1     | Phase 2  | E4                |
+| E11  | 設定持久化        | P2     | Phase 1  | Phase 0           |
+| E12  | 建置分發          | P2     | Phase 4  | 全部              |
+| E13  | 文件              | P2     | 持續     | —                |
 
 ---
 
 ## 14. 相關文件索引
 
-| 文件 | 路徑 | 說明 |
-|------|------|------|
-| 系統架構 | [architecture.md](architecture.md) | 四層架構、通訊模式、API 目錄 |
-| 演算法邏輯 | [algorithm.md](algorithm.md) | 每個函式的詳細演算法與流程圖 |
-| 欄位映射 | [field-mapping-spc.md](field-mapping-spc.md) | 所有欄位定義、類型、公式 |
-| 產品需求 | [prd.md](prd.md) | 13 個 Epic、使用者故事、驗收標準 |
-| 技術設計 | [design.md](design.md) | 重建架構設計、元件介面、資料模型 |
-| 需求規格 | [requirements.md](requirements.md) | 18 項功能需求 + 非功能需求 |
-| 重建計劃 | [reconstruction-plan.md](reconstruction-plan.md) | 本文件 |
+| 文件       | 路徑                                          | 說明                             |
+| ---------- | --------------------------------------------- | -------------------------------- |
+| 系統架構   | [architecture.md](architecture.md)               | 四層架構、通訊模式、API 目錄     |
+| 演算法邏輯 | [algorithm.md](algorithm.md)                     | 每個函式的詳細演算法與流程圖     |
+| 欄位映射   | [field-mapping-spc.md](field-mapping-spc.md)     | 所有欄位定義、類型、公式         |
+| 產品需求   | [prd.md](prd.md)                                 | 13 個 Epic、使用者故事、驗收標準 |
+| 重建計劃   | [reconstruction-plan.md](reconstruction-plan.md) | 本文件                           |

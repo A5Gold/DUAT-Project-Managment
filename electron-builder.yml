@@ -1,0 +1,43 @@
+# electron-builder configuration
+# https://www.electron.build/configuration
+
+appId: com.mtr.duat
+productName: MTR DUAT
+copyright: Copyright (c) MTR Corporation
+
+# Directories
+directories:
+  output: build
+  buildResources: build-resources
+
+# Files to include in the app
+files:
+  - electron/**/*
+  - frontend/dist/**/*
+  - "!**/*.map"
+  - "!**/node_modules/**/{CHANGELOG.md,README.md,readme.md,LICENSE,license}"
+
+# Bundle the PyInstaller backend as extra resources
+extraResources:
+  - from: backend_dist/backend
+    to: backend
+    filter:
+      - "**/*"
+
+# Windows configuration
+win:
+  target: portable
+  icon: electron/icon.ico
+  signAndEditExecutable: false
+  forceCodeSigning: false
+
+# Portable .exe configuration
+portable:
+  artifactName: MTR_DUAT_${version}.exe
+  requestExecutionLevel: user
+
+# Compression
+compression: normal
+
+# Do not publish
+publish: null
